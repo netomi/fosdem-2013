@@ -1,0 +1,391 @@
+% Slides for talk at fosdem
+%
+% Thomas Neidhart <thomas.neidhart@gmail.com>
+% Gilles Sadowski
+% January 27, 2013
+
+\documentclass[10pt,mathserif]{beamer}
+\usetheme{Boadilla}
+
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortinstitute
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+      \usebeamerfont{title in head/foot}\insertshorttitle
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+      \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+      \insertframenumber{} / \inserttotalframenumber\hspace*{2ex}
+    \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+%\useoutertheme[footline=authortitle]{miniframes}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{rotating} % for defining \schwa
+\usepackage{color}
+\usepackage{minted}
+\usepackage{longtable}
+
+\newcommand{\fmgood}[1]{\color{green}{#1}}
+\newcommand{\fmmedium}[1]{\color{orange}{#1}}
+\newcommand{\fmbad}[1]{\color{red}{#1}}
+
+\newcommand{\newauthor}[2]{
+  \parbox{0.26\textwidth}{
+    \texorpdfstring
+      {
+        \centering
+        #1 \\
+        {\scriptsize{\urlstyle{same}\url{#2}\urlstyle{tt}}}
+      }
+      {#1}
+  }
+}
+
+\definecolor{links}{HTML}{2A1B81}
+\hypersetup{colorlinks,linkcolor=cyan,urlcolor=magenta}
+
+\newcommand{\schwa}{\raisebox{1ex}{\begin{turn}{180}e\end{turn}}}
+
+%gets rid of bottom navigation bars
+%\setbeamertemplate{footline}[page number]{}
+
+%gets rid of navigation symbols
+\setbeamertemplate{navigation symbols}{}
+
+\title{Apache Commons Math}
+\subtitle{A Java library of mathematical tools}
+\author{
+  \newauthor{Thomas Neidhart}{tn@apache.org}
+\and
+  \newauthor{Gilles Sadowski}{erans@apache.org}
+}
+\institute[FOSDEM 2013]{FOSDEM 2013}
+\date{February 02, 2013}
+\begin{document}
+
+%----------- titlepage ----------------------------------------------%
+
+\begin{frame} %[plain]
+  \titlepage
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}
+  \frametitle{Overview of the talk}
+
+\begin{itemize}
+  \item What is it?
+  \item What does it provide?
+  \item Some simple examples
+  \item Who is using it?
+  \item What to do after the presentation?
+\end{itemize}
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}
+  \frametitle{What is it?}
+
+\begin{itemize}
+  \item 100\% pure, self-contained Java library
+  \item mathematical methods \& algorithms
+  \item covers a wide range of topics
+  \item aims for clean, documented and object-oriented code
+  \item well tested and maintained
+  \item following the Apache way
+  \item Apache 2.0 license
+\end{itemize}
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+
+\input{in_numbers.tex}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}
+  \frametitle{What topics does it cover?}
+
+% TBD - better structure, include package names
+
+\begin{small}
+\begin{itemize}
+  \item Automatic Differentiation
+  \item Numerical Integration
+  \item Interpolation
+  \item Root finders
+  \item Arbitrary precision arithmetic
+  \item Probability distributions
+  \item Linear Algebra
+  \item Fitting (non-linear least-squares, curve fitting)
+  \item Ordinary differential equations (ODE)
+  \item Linear/Non-linear optimization
+  \item Random number generators
+  \item Computational Geometry
+  \item Special functions (Beta, Gamma)
+  \item Kalman filter
+  \item Fast Fourier transform
+  \item Genetic algorithms
+  \item Statistics (correlation, regression, descriptive, inference)
+\end{itemize}
+\end{small}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}
+  \frametitle{FastMath}
+
+\begin{itemize}
+  \item pure Java replacement for java.lang.Math
+  \item better performance for most of the functions
+  \item better accuracy than Math and StrictMath
+  \item currently not always faster :-(
+\end{itemize}
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+
+\begin{frame}[fragile,allowframebreaks]{FastMath benchmark}
+\input{fm_perf.1000000000.java7.out.tex}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+  \frametitle{Example - Gauss Integration}
+
+\begin{minted}[xleftmargin=10pt,fontsize=\footnotesize,linenos=true]{java}
+import o.a.c.m.analysis.UnivariateFunction;
+import o.a.c.m.analysis.function.Cos;
+import o.a.c.m.analysis.integration.gauss.GaussIntegratorFactory;
+import o.a.c.m.analysis.integration.gauss.GaussIntegrator;
+
+// ...
+
+GaussIntegratorFactory factory = new GaussIntegratorFactory();
+UnivariateFunction cos = new Cos();
+// create an Gauss integrator for the interval [0, PI/2]
+GaussIntegrator integrator = factory.legendre(7, 0, 0.5 * Math.PI);
+double s = integrator.integrate(cos); 
+\end{minted}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+
+% \input{example.multivariate_optimizer.tex}
+ 
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+  \frametitle{Example - Root finder}
+
+\begin{minted}[xleftmargin=10pt,fontsize=\footnotesize,linenos=true]{java}
+import o.a.c.m.analysis.UnivariateFunction;
+import o.a.c.m.analysis.solvers.BrentSolver;
+import o.a.c.m.analysis.solvers.UnivariateSolver;
+
+// ...
+
+UnivariateFunction f = new UnivariateFunction() {
+    public double value(double x) {
+        return FastMath.sin(x);
+    }
+}
+UnivariateSolver solver = new BrentSolver();
+// we know that the root is somewhere between 3 and 4 ;-)
+double result = solver.solve(100, f, 3, 4);
+\end{minted}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+
+\begin{frame}[fragile]
+  \frametitle{Example - Eigenvalue Decomposition}
+
+\begin{minted}[xleftmargin=10pt,fontsize=\footnotesize,linenos=true]{java}
+import o.a.c.m.linear.RealMatrix;
+import o.a.c.m.linear.MatrixUtils;
+import o.a.c.m.linear.EigenDecomposition;
+
+// ...
+
+RealMatrix matrix = 
+    MatrixUtils.createRealMatrix(new double[][] {
+         {  5,   10,   15 },
+         { 10,   20,   30 },
+         { 15,   30,   45 }
+});
+
+EigenDecomposition ed = new EigenDecomposition(matrix);
+double[] eigValues = ed.getRealEigenvalues();
+\end{minted}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+
+\begin{frame}[fragile]
+  \frametitle{Example - Linear optimization: Simplex method}
+
+\begin{small}
+Maximize \(2x_2 + 6x_1 + 7x_0\) \\
+with constraints \\
+   \(\quad x_2 + 2x_1 + x_0 <= 2\) \\ 
+   \(\quad -x_2 + x_1 + x_0 <= -1\) \\
+   \(\quad 2x_2 - 3x_1 + x_0 <= -1\)
+\end{small}
+
+\\~\\
+
+\begin{minted}[xleftmargin=10pt,fontsize=\tiny,linenos=true]{java}
+import o.a.c.m.optim.linear.LinearObjectiveFunction;
+import o.a.c.m.optim.linear.LinearConstraint;
+import o.a.c.m.optim.linear.SimplexSolver;
+
+/// ...
+
+LinearObjectiveFunction f = new LinearObjectiveFunction(new double[] { 2, 6, 7 }, 0);
+
+ArrayList<LinearConstraint> constraints = new ArrayList<LinearConstraint>();
+constraints.add(new LinearConstraint(new double[] { 1, 2, 1 }, Relationship.LEQ, 2));
+constraints.add(new LinearConstraint(new double[] { -1, 1, 1 }, Relationship.LEQ, -1));
+constraints.add(new LinearConstraint(new double[] { 2, -3, 1 }, Relationship.LEQ, -1));
+
+SimplexSolver solver = new SimplexSolver();
+PointValuePair solution = solver.optimize(new MaxIter(100), f, new LinearConstraintSet(constraints),
+                                          GoalType.MAXIMIZE, new NonNegativeConstraint(false));
+\end{minted}
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}
+  \frametitle{Who is using Commons Math?}
+
+Responses from our community:
+
+\begin{tiny}
+\begin{center}
+\begin{longtable}{|l|p{6cm}|p{3cm}|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Field}} & \multicolumn{1}{c|}{\textbf{Topic}} & \multicolumn{1}{c|}{\textbf{Link}}\\
+\hline
+Space & Orekit - open-source space dynamics library &
+\url{http://www.orekit.org}\\
+\hline
+Astronomy & Gaia Project: data processing of astrometric, photometric, and
+spectroscopic data from 1 billion stars &
+\url{http://www.rssd.esa.int/index.php?project=GAIA&page=DPAC_Introduction}\\
+\hline
+Material Science & Simulate the mechanical behaviour of composite materials &
+\url{http://navier.enpc.fr/BRISARD-Sebastien}
+\\
+\hline
+Biotech & Nuclear Magnetic Resonance (NMR) data analysis package for molecular
+structure refinement & \url{http://www.onemoonscientific.com}\\
+\hline
+Medical Technology &  Image processing of 3D human MRI and CT scans &
+\url{http://www.stjude.org} \\
+\hline
+Finance & Risk managment and analysis & \url{http://www.osloclearing.no/} \\
+\hline
+\end{longtable}
+\end{center}
+\end{tiny}
+
+A maven dependency search:
+
+\begin{itemize}
+  \item Apache Hama - parallel computing framework
+  \item Myrrix - A real-time recommender system
+  \item Apache Mahout - scalable machine learning
+  \item Redberry - Symbolic Tensor Algebra System
+  \item Facebook jcommon-stats - well you know it
+  \item \ldots
+\end{itemize}
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[fragile]
+  \frametitle{How to use it yourself?}
+
+Maven:
+
+\begin{minted}[xleftmargin=10pt,fontsize=\small,linenos=false]{xml}
+<dependency>
+	<groupId>org.apache.commons</groupId>
+	<artifactId>commons-math3</artifactId>
+	<version>3.1.1</version>
+</dependency>
+\end{minted}
+
+Download:
+
+\url{http://commons.apache.org/math/download_math.cgi}
+            
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}
+  \frametitle{Links}
+
+\begin{itemize}
+  \item Project homepage: \url{http://commons.apache.org/math/}
+  \item Issue tracker: \url{https://issues.apache.org/jira/browse/MATH}
+  \item Mailinglists: dev@commons.apache.org \& user@commons.apache.org \\
+  e-mail subject: [math]
+  \item Wiki: \url{http://wiki.apache.org/commons/MathWishList}
+\end{itemize}
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}
+  \frametitle{How to contribute?}
+
+\begin{itemize}
+  \item Check out the user guide \url{http://commons.apache.org/math/userguide/index.html}
+  \item Ask questions on the user mailinglist
+  \item Participate in discussions on the dev mailinglist
+  \item Create bug reports / feature requests / improvements in JIRA
+  \item Send patches (code, documentation, examples)
+  \item Provide feedback - most welcome!
+\end{itemize}
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}
+  \frametitle{Hot Topics}
+
+\begin{itemize}
+  \item refactoring Linear Algebra package
+  \item refactoring Optimization package
+  \item Exception handling - checked vs. unchecked
+  \item Add more computational geometry algorithms
+  \item Upgrade to more recent Java versions (fork/join framework)
+  \item (real) FastMath vs. AccurateMath (integration of jodk)
+  \item improve user guide / examples
+  \item lots of new feature requests \ldots
+\end{itemize}
+
+\end{frame}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}
+  \frametitle{The End!}
+
+\begin{itemize}
+  \item Questions?
+\end{itemize}
+
+\end{frame}
+
+\end{document}

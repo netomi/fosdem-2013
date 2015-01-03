@@ -1,0 +1,112 @@
+\begin{small}
+Number of calls: $10^9$
+
+Java 1.7.0\_03 (1.7.0\_03-b21) OpenJDK 64-Bit Server VM (22.0-b10)
+\end{small}
+
+\begin{columns}[t]
+
+\begin{column}{5cm}
+
+\begin{tiny}
+\begin{longtable}{|l|r|r|r|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Function}} & \multicolumn{1}{c|}{\textbf{Class}} & \multicolumn{1}{c|}{\textbf{Time/call (ms)}} & \multicolumn{1}{c|}{\textbf{Ratio (\%)}}\\
+\hline
+log   & StrictMath & 5.22349648e-05 &  100 \\
+      &       Math & 2.04540923e-05 &  39 \\
+      &   FastMath & 2.42863614e-05 &  \fmbad{47} \\
+\hline
+log10 & StrictMath & 7.06720929e-05 &  100 \\
+      &       Math & 2.05568765e-05 &  29 \\
+      &   FastMath & 7.56041686e-05 &  \fmbad{107} \\
+\hline
+log1p & StrictMath & 3.72191413e-05 &  100 \\
+      &       Math & 3.78759816e-05 &  101 \\
+      &   FastMath & 7.50277567e-05 &  \fmbad{201} \\
+\hline
+pow   & StrictMath & 1.73481768e-04 &  100 \\
+      &       Math & 1.64277768e-04 &  94 \\
+      &   FastMath & 1.05758357e-04 &  \fmgood{60} \\
+\hline
+exp   & StrictMath & 3.47634732e-05 &  100 \\
+      &       Math & 2.28322028e-05 &  65 \\
+      &   FastMath & 1.72182428e-05 &  \fmgood{50} \\
+\hline
+sin   & StrictMath & 2.86189157e-05 &  100 \\
+      &       Math & 2.72834491e-05 &  95 \\
+      &   FastMath & 2.13875014e-05 &  \fmgood{75} \\
+\hline
+asin  & StrictMath & 3.61743365e-05 &  100 \\
+      &       Math & 3.63858979e-05 &  100 \\
+      &   FastMath & 6.65170752e-05 &  \fmbad{184} \\
+\hline
+cos   & StrictMath & 3.23569717e-05 &  100 \\
+      &       Math & 3.09660350e-05 &  96 \\
+      &   FastMath & 2.37797205e-05 &  \fmgood{73} \\
+\hline
+acos  & StrictMath & 3.74091467e-05 &  100 \\
+      &       Math & 3.72805271e-05 &  99 \\
+      &   FastMath & 8.99709198e-05 &  \fmbad{240} \\
+\hline
+tan   & StrictMath & 4.36050840e-05 &  100 \\
+      &       Math & 3.94326807e-05 &  90 \\
+      &   FastMath & 3.96236785e-05 &  \fmgood{91} \\
+\hline
+\end{longtable}
+\end{tiny}
+
+\end{column}
+
+\begin{column}{5cm}
+
+\begin{tiny}
+\begin{longtable}{|l|r|r|r|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Function}} & \multicolumn{1}{c|}{\textbf{Class}} & \multicolumn{1}{c|}{\textbf{Time/call (ms)}} & \multicolumn{1}{c|}{\textbf{Ratio (\%)}}\\
+\hline
+atan  & StrictMath & 2.38076340e-05 &  100 \\
+      &       Math & 2.38346576e-05 &  100 \\
+      &   FastMath & 2.78287849e-05 &  \fmbad{117} \\
+\hline
+atan2 & StrictMath & 6.14545612e-05 &  100 \\
+      &       Math & 6.25871086e-05 &  102 \\
+      &   FastMath & 6.24287698e-05 &  \fmmedium{102} \\
+\hline
+hypot & StrictMath & 2.51933255e-04 &  100 \\
+      &       Math & 2.51892886e-04 &  100 \\
+      &   FastMath & 1.78561127e-05 &  \fmgood{71} \\
+\hline
+cbrt  & StrictMath & 7.08035203e-05 &  100 \\
+      &       Math & 7.09881088e-05 &  100 \\
+      &   FastMath & 4.12985279e-05 &  \fmgood{58} \\
+\hline
+sqrt  & StrictMath & 6.69162232e-06 &  100 \\
+      &       Math & 6.63196797e-06 &  99 \\
+      &   FastMath & 6.62463595e-06 &  \fmgood{99} \\
+\hline
+cosh  & StrictMath & 7.51256426e-05 &  100 \\
+      &       Math & 7.52944441e-05 &  100 \\
+      &   FastMath & 3.91062794e-05 &  \fmgood{52} \\
+\hline
+sinh  & StrictMath & 7.52920027e-05 &  100 \\
+      &       Math & 7.58819054e-05 &  100 \\
+      &   FastMath & 5.80563672e-05 &  \fmgood{77} \\
+\hline
+tanh  & StrictMath & 6.94914940e-05 &  100 \\
+      &       Math & 7.01421819e-05 &  100 \\
+      &   FastMath & 6.10102135e-05 &  \fmgood{88} \\
+\hline
+expm1 & StrictMath & 4.19029705e-05 &  100 \\
+      &       Math & 4.18109329e-05 &  100 \\
+      &   FastMath & 3.19643446e-05 &  \fmgood{76} \\
+\hline
+abs   & StrictMath & 5.08597800e-06 &  100 \\
+      &       Math & 5.14014393e-06 &  101 \\
+      &   FastMath & 5.37928625e-06 &  \fmmedium{105} \\
+\hline
+\end{longtable}
+\end{tiny}
+\end{column}
+
+\end{columns}
